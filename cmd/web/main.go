@@ -3,17 +3,15 @@ package main
 import (
 	"log"
 
+	"github.com/MicahAsowata/elsa/cmd/web/controller"
 	"github.com/gofiber/fiber/v2"
 )
 
-func home(c *fiber.Ctx) error {
-	return c.SendString("Hello homies 🖖🏾🤏🏾")
-}
+const port = ":3000"
+
 func main() {
 	app := fiber.New()
-
-	app.Get("/", home)
-
+	controller.TaskRoutes(app)
 	log.Println("Listening baby")
-	app.Listen(":3000")
+	app.Listen(port)
 }
