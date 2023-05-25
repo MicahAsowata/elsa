@@ -2,11 +2,11 @@ package main
 
 func TaskRoutes(a *application) {
 	taskRoute := a.app.Group("/tarea")
-	taskRoute.Get("/", TaskIndex)
-	taskRoute.Get("/new", TaskNew)
+	taskRoute.Get("/", a.TaskIndex)
+	taskRoute.Get("/new", a.TaskNew)
 	taskRoute.Post("/", a.TaskCreate)
-	taskRoute.Get("/:id", TaskShow)
-	taskRoute.Get("/:id/edit", TaskEdit)
-	taskRoute.Post("/:id", TaskUpdate)
-	taskRoute.Get("/:id/delete", TaskDestroy)
+	taskRoute.Get("/:id", a.TaskShow)
+	taskRoute.Get("/:id/edit", a.TaskEdit)
+	taskRoute.Post("/:id", a.TaskUpdate)
+	taskRoute.Get("/:id/delete", a.TaskDestroy)
 }

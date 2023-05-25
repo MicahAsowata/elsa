@@ -8,11 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
-func TaskIndex(c *fiber.Ctx) error {
+func (app *application) TaskIndex(c *fiber.Ctx) error {
 	return c.SendString("Index")
 }
 
-func TaskNew(c *fiber.Ctx) error {
+func (app *application) TaskNew(c *fiber.Ctx) error {
 	return c.SendString("New")
 }
 
@@ -32,22 +32,22 @@ func (app *application) TaskCreate(c *fiber.Ctx) error {
 	return c.SendString("Successful")
 }
 
-func TaskShow(c *fiber.Ctx) error {
+func (app *application) TaskShow(c *fiber.Ctx) error {
 	id := c.Params("id")
 	return c.SendString(fmt.Sprintf("Showing task %s", id))
 }
 
-func TaskEdit(c *fiber.Ctx) error {
+func (app *application) TaskEdit(c *fiber.Ctx) error {
 	id := c.Params("id")
 	return c.SendString(fmt.Sprintf("Editing task %s", id))
 }
 
-func TaskUpdate(c *fiber.Ctx) error {
+func (app *application) TaskUpdate(c *fiber.Ctx) error {
 	id := c.Params("id")
 	return c.SendString(fmt.Sprintf("Updating task %s", id))
 }
 
-func TaskDestroy(c *fiber.Ctx) error {
+func (app *application) TaskDestroy(c *fiber.Ctx) error {
 	id := c.Params("id")
 	return c.SendString(fmt.Sprintf("Deleting task %s", id))
 }
