@@ -9,11 +9,17 @@ import (
 )
 
 func (app *application) TaskIndex(c *fiber.Ctx) error {
-	return c.SendString("Index")
+	return c.Render("tasks/index", fiber.Map{
+		"Message": "🐿️",
+		"Title":   "All Tasks",
+	})
 }
 
 func (app *application) TaskNew(c *fiber.Ctx) error {
-	return c.SendString("New")
+	return c.Render("tasks/new", fiber.Map{
+		"Message": "🐍",
+		"Title":   "New Tasks",
+	})
 }
 
 func (app *application) TaskCreate(c *fiber.Ctx) error {
@@ -33,13 +39,17 @@ func (app *application) TaskCreate(c *fiber.Ctx) error {
 }
 
 func (app *application) TaskShow(c *fiber.Ctx) error {
-	id := c.Params("id")
-	return c.SendString(fmt.Sprintf("Showing task %s", id))
+	return c.Render("tasks/show", fiber.Map{
+		"Message": c.Params("id"),
+		"Title":   "Task 🦒",
+	})
 }
 
 func (app *application) TaskEdit(c *fiber.Ctx) error {
-	id := c.Params("id")
-	return c.SendString(fmt.Sprintf("Editing task %s", id))
+	return c.Render("tasks/index", fiber.Map{
+		"Message": c.Params("id"),
+		"Title":   "Edit task 🦓",
+	})
 }
 
 func (app *application) TaskUpdate(c *fiber.Ctx) error {

@@ -29,7 +29,7 @@ func main() {
 	hostName := os.Getenv("HOST_NAME")
 	dbName := os.Getenv("DB_NAME")
 	hostPswd := os.Getenv("HOST_PSWD")
-	engine := html.New("./ui/html", ".html")
+	engine := html.New("./ui", ".html")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
