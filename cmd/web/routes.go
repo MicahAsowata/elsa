@@ -1,16 +1,12 @@
 package main
 
-import (
-	"github.com/gofiber/fiber/v2"
-)
-
-func TaskRoutes(app *fiber.App) {
-	baseRouteName := app.Group("/tarea")
-	baseRouteName.Get("/new", TaskNew)
-	baseRouteName.Get("/", TaskIndex)
-	baseRouteName.Post("/", TaskCreate)
-	baseRouteName.Get("/:id", TaskShow)
-	baseRouteName.Get("/:id/edit", TaskEdit)
-	baseRouteName.Post("/:id", TaskUpdate)
-	baseRouteName.Get("/:id/delete", TaskDestroy)
+func TaskRoutes(a *application) {
+	taskRoute := a.app.Group("/tarea")
+	taskRoute.Get("/", TaskIndex)
+	taskRoute.Get("/new", TaskNew)
+	taskRoute.Post("/", a.TaskCreate)
+	taskRoute.Get("/:id", TaskShow)
+	taskRoute.Get("/:id/edit", TaskEdit)
+	taskRoute.Post("/:id", TaskUpdate)
+	taskRoute.Get("/:id/delete", TaskDestroy)
 }

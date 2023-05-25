@@ -1,11 +1,7 @@
 package models
 
-import "time"
-
-type Task struct {
-	ID        string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+type Tasks struct {
+	ID        uint
 	Name      string
 	Details   string
 	Completed bool
