@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gofiber/fiber/v2 v2.46.0
+	github.com/gofiber/template/html/v2 v2.0.1
 	github.com/joho/godotenv v1.5.1
 	github.com/pocketbase/dbx v1.10.0
 	go.uber.org/zap v1.24.0
@@ -12,6 +13,7 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
