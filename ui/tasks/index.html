@@ -1,4 +1,6 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
-<h1>{{.Message}}</h1>
-{{template "partials/footer" .}}
+{{range .Message}}
+<h1>{{.Name}}</h1>
+<a href="/tarea/{{.ID}}">Learn More</a>
+{{end}} {{template "partials/footer" .}}

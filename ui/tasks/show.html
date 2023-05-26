@@ -1,4 +1,7 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
-<h1>{{.Message}}</h1>
+<h1>{{.Name}}</h1>
+<p>{{.Details}}</p>
+<p>{{.Completed}}</p>
+<a href="/tarea/{{.ID}}/edit">Edit task</a>
 {{template "partials/footer" .}}
