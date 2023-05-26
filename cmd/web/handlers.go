@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/MicahAsowata/elsa/internal/db/models"
 	"github.com/gofiber/fiber/v2"
+	"github.com/pocketbase/dbx"
 	"go.uber.org/zap"
 )
 
@@ -30,7 +32,7 @@ func (app *application) TaskNew(c *fiber.Ctx) error {
 
 func (app *application) TaskCreate(c *fiber.Ctx) error {
 	task := models.Tasks{
-		Name:      "Joy",
+		Name:      "Joy ❤️❤️❤️",
 		Details:   "We are Happy",
 		Completed: false,
 	}
@@ -74,19 +76,37 @@ func (app *application) TaskEdit(c *fiber.Ctx) error {
 		app.logger.Error("Error", zap.Error(err))
 	}
 	return c.Render("tasks/edit", fiber.Map{
-		"Name":    task.Name,
-		"Details": task.Details,
-		"ID":      task.ID,
-		"Title":   task.Name,
+		"Completed": task.Completed,
+		"Name":      task.Name,
+		"Details":   task.Details,
+		"ID":        task.ID,
+		"Title":     task.Name,
 	})
 }
 
 func (app *application) TaskUpdate(c *fiber.Ctx) error {
-	id := c.Params("id")
-	return c.SendString(fmt.Sprintf("Updating task %s", id))
+	task := models.Tasks{}
+	err := c.BodyParser(&task)
+	if err != nil {
+		app.logger.Error("Error", zap.Error(err))
+	}
+	_, err = app.db.Update("tasks", dbx.Params{
+		"name":    task.Name,
+		"details": task.Details,
+	}, dbx.Between("id", c.Params("id"), c.Params("id"))).Execute()
+
+	if err != nil {
+		app.logger.Error("Error", zap.Error(err))
+	}
+	c.Redirect(fmt.Sprintf("/tarea/%s", c.Params("id")), http.StatusOK)
+	return nil
 }
 
 func (app *application) TaskDestroy(c *fiber.Ctx) error {
-	id := c.Params("id")
-	return c.SendString(fmt.Sprintf("Deleting task %s", id))
+	_, err := app.db.Delete("tasks", dbx.Between("id", c.Params("id"), c.Params("id"))).Execute()
+	if err != nil {
+		app.logger.Error("Error", zap.Error(err))
+	}
+	c.Redirect("/tarea/", http.StatusOK)
+	return nil
 }
