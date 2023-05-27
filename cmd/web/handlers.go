@@ -4,10 +4,13 @@ import (
 	"fmt"
 
 	"github.com/MicahAsowata/elsa/internal/db/models"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/pocketbase/dbx"
 	"go.uber.org/zap"
 )
+
+var validate = validator.New()
 
 func (base *base) Index(c *fiber.Ctx) error {
 	notes := &[]models.Notes{}
@@ -37,7 +40,14 @@ func (base *base) Create(c *fiber.Ctx) error {
 	if err != nil {
 		base.logger.Error("Error", zap.Error(err))
 	}
-
+	err = validate.Struct(note)
+	if err != nil {
+		base.logger.Error("Error", zap.Error(err))
+		return c.Render("error", fiber.Map{
+			"Title":   "⚠️ Error",
+			"Message": "That note is invalid",
+		})
+	}
 	_, err = base.db.Insert("notes", dbx.Params{
 		"title": note.Title,
 		"body":  note.Body,
@@ -59,12 +69,21 @@ func (base *base) Show(c *fiber.Ctx) error {
 		base.logger.Error("Error", zap.Error(err))
 	}
 	note := &models.Notes{}
+
 	err = base.db.Select("id", "title", "body").From("notes").Where(dbx.HashExp{"id": id}).One(&note)
 	if err != nil {
 		base.logger.Error("Error", zap.Error(err))
 		return c.Render("error", fiber.Map{
 			"Title":   "⚠️ Error",
 			"Message": "We could not find that note.",
+		})
+	}
+	err = validate.Struct(note)
+	if err != nil {
+		base.logger.Error("Error", zap.Error(err))
+		return c.Render("error", fiber.Map{
+			"Title":   "⚠️ Error",
+			"Message": "That note is invalid",
 		})
 	}
 	return c.Render("notes/show", fiber.Map{
@@ -89,6 +108,14 @@ func (base *base) Edit(c *fiber.Ctx) error {
 			"Message": "It seems like the note doesn't want to be changed",
 		})
 	}
+	err = validate.Struct(note)
+	if err != nil {
+		base.logger.Error("Error", zap.Error(err))
+		return c.Render("error", fiber.Map{
+			"Title":   "⚠️ Error",
+			"Message": "That note is invalid",
+		})
+	}
 	return c.Render("notes/edit", fiber.Map{
 
 		"Name":  note.Title,
@@ -104,6 +131,14 @@ func (base *base) Update(c *fiber.Ctx) error {
 	err := c.BodyParser(&note)
 	if err != nil {
 		base.logger.Error("Error", zap.Error(err))
+	}
+	err = validate.Struct(note)
+	if err != nil {
+		base.logger.Error("Error", zap.Error(err))
+		return c.Render("error", fiber.Map{
+			"Title":   "⚠️ Error",
+			"Message": "That note is invalid",
+		})
 	}
 	_, err = base.db.Update("notes", dbx.Params{
 		"title": note.Title,
