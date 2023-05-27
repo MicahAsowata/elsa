@@ -1,6 +1,7 @@
 package main
 
 func Routes(b *base) {
+	b.base.Static("/static", "./ui/static")
 	b.base.Get("/", b.Index)
 	b.base.Get("/new", b.New)
 	b.base.Post("/", b.Create)
