@@ -1,10 +1,10 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
 <form action="/{{.ID}}" method="post">
-  <label for="name">Title</label>
-  <input type="text" name="name" value="{{.Name}}" />
+  <label for="title">👑Title</label>
+  <input type="text" name="title" value="{{.Name}}" />
 
-  <label for="body">Body</label>
+  <label for="body">🎯Body</label>
   <input type="text" name="body" value="{{.Body}}" />
   <button type="submit">🖋️ Edit Note</button>
 </form>
