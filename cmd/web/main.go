@@ -18,6 +18,8 @@ type application struct {
 	app    *fiber.App
 	db     *dbx.DB
 	logger *zap.Logger
+	engine *html.Engine
+	port   string
 }
 
 func main() {
@@ -42,6 +44,8 @@ func main() {
 		app:    app,
 		db:     db,
 		logger: logger,
+		engine: engine,
+		port:   port,
 	}
 	TaskRoutes(base)
 	logger.Info("Speak, for thy servant heareth")

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/MicahAsowata/elsa/internal/db/models"
 	"github.com/gofiber/fiber/v2"
@@ -24,26 +23,25 @@ func (app *application) TaskIndex(c *fiber.Ctx) error {
 }
 
 func (app *application) TaskNew(c *fiber.Ctx) error {
+
 	return c.Render("tasks/new", fiber.Map{
-		"Message": "🐍",
-		"Title":   "New Tasks",
+		"Title": "New Tasks",
 	})
 }
 
 func (app *application) TaskCreate(c *fiber.Ctx) error {
-	task := models.Tasks{
-		Name:      "Joy ❤️❤️❤️",
-		Details:   "We are Happy",
-		Completed: false,
-	}
-
-	err := app.db.Model(&task).Insert()
+	task := models.Tasks{}
+	err := c.BodyParser(&task)
 	if err != nil {
 		app.logger.Error("Error", zap.Error(err))
-		return c.SendString(string(err.Error()))
 	}
 
-	return c.SendString("Successful")
+	err = app.db.Model(&task).Insert()
+	if err != nil {
+		app.logger.Error("Error", zap.Error(err))
+	}
+
+	return c.Redirect("/tarea/")
 }
 
 func (app *application) TaskShow(c *fiber.Ctx) error {
@@ -98,8 +96,8 @@ func (app *application) TaskUpdate(c *fiber.Ctx) error {
 	if err != nil {
 		app.logger.Error("Error", zap.Error(err))
 	}
-	c.Redirect(fmt.Sprintf("/tarea/%s", c.Params("id")), http.StatusOK)
-	return nil
+
+	return c.Redirect(fmt.Sprintf("/tarea/%s", c.Params("id")))
 }
 
 func (app *application) TaskDestroy(c *fiber.Ctx) error {
@@ -107,6 +105,5 @@ func (app *application) TaskDestroy(c *fiber.Ctx) error {
 	if err != nil {
 		app.logger.Error("Error", zap.Error(err))
 	}
-	c.Redirect("/tarea/", http.StatusOK)
-	return nil
+	return c.Redirect("/tarea/")
 }
