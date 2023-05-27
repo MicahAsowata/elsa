@@ -56,7 +56,7 @@ func (base *base) Create(c *fiber.Ctx) error {
 		base.logger.Error("Error", zap.Error(err))
 		return c.Render("error", fiber.Map{
 			"Title":   "⚠️ Error",
-			"Message": "You've really important stuff to say, but the note is not creating",
+			"Message": "Note could not be created",
 		})
 	}
 
@@ -100,7 +100,7 @@ func (base *base) Edit(c *fiber.Ctx) error {
 		base.logger.Error("Error", zap.Error(err))
 	}
 	note := &models.Notes{}
-	err = base.db.Select("id", "title", "body").Model(id, note)
+	err = base.db.Select("id", "title", "body").From("notes").Where(dbx.HashExp{"id": id}).One(&note)
 	if err != nil {
 		base.logger.Error("Error", zap.Error(err))
 		return c.Render("error", fiber.Map{
