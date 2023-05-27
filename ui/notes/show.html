@@ -1,0 +1,7 @@
+{{template "partials/head"}}
+<title>{{.Title}}</title>
+<h1>{{.Name}}</h1>
+<p>{{.Body}}</p>
+<a href="/{{.ID}}/edit">🖋️ Edit this note </a>
+<a href="/{{.ID}}/delete">🗑️ Delete task</a>
+{{template "partials/footer" .}}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/MicahAsowata/elsa/internal/db/models"
 	"github.com/gofiber/fiber/v2"
@@ -10,100 +9,98 @@ import (
 	"go.uber.org/zap"
 )
 
-func (app *application) TaskIndex(c *fiber.Ctx) error {
-	tasks := &[]models.Tasks{}
-	err := app.db.Select("id", "name", "details", "completed").All(tasks)
-
-	log.Println(err)
-	log.Println(tasks)
-	return c.Render("tasks/index", fiber.Map{
-		"Message": tasks,
-		"Title":   "All Tasks",
+func (base *base) Index(c *fiber.Ctx) error {
+	notes := &[]models.Notes{}
+	err := base.db.Select("id", "name", "body").All(notes)
+	if err != nil {
+		base.logger.Error("Error", zap.Error(err))
+	}
+	return c.Render("notes/index", fiber.Map{
+		"Notes": notes,
+		"Title": "🔥All Notes🔥",
 	})
 }
 
-func (app *application) TaskNew(c *fiber.Ctx) error {
-
-	return c.Render("tasks/new", fiber.Map{
-		"Title": "New Tasks",
+func (base *base) New(c *fiber.Ctx) error {
+	return c.Render("notes/new", fiber.Map{
+		"Title": "⚡New Note⚡",
 	})
 }
 
-func (app *application) TaskCreate(c *fiber.Ctx) error {
-	task := models.Tasks{}
-	err := c.BodyParser(&task)
+func (base *base) Create(c *fiber.Ctx) error {
+	note := models.Notes{}
+	err := c.BodyParser(&note)
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
 
-	err = app.db.Model(&task).Insert()
+	err = base.db.Model(&note).Insert()
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
 
-	return c.Redirect("/tarea/")
+	return c.Redirect("/")
 }
 
-func (app *application) TaskShow(c *fiber.Ctx) error {
+func (base *base) Show(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	task := &models.Tasks{}
-	err = app.db.Select("id", "name", "details", "completed").Model(id, task)
+	note := &models.Notes{}
+	err = base.db.Select("id", "name", "body").Model(id, note)
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	return c.Render("tasks/show", fiber.Map{
-		"Name":      task.Name,
-		"Details":   task.Details,
-		"Completed": task.Completed,
-		"ID":        task.ID,
-		"Title":     task.Name,
+	return c.Render("notes/show", fiber.Map{
+		"Name":  note.Title,
+		"Body":  note.Body,
+		"ID":    note.ID,
+		"Title": note.Title,
 	})
 }
 
-func (app *application) TaskEdit(c *fiber.Ctx) error {
+func (base *base) Edit(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	task := &models.Tasks{}
-	err = app.db.Select("id", "name", "details", "completed").Model(id, task)
+	note := &models.Notes{}
+	err = base.db.Select("id", "name", "body").Model(id, note)
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	return c.Render("tasks/edit", fiber.Map{
-		"Completed": task.Completed,
-		"Name":      task.Name,
-		"Details":   task.Details,
-		"ID":        task.ID,
-		"Title":     task.Name,
+	return c.Render("notes/edit", fiber.Map{
+
+		"Name":  note.Title,
+		"Body":  note.Body,
+		"ID":    note.ID,
+		"Title": note.Title,
 	})
 }
 
-func (app *application) TaskUpdate(c *fiber.Ctx) error {
-	task := models.Tasks{}
-	err := c.BodyParser(&task)
+func (base *base) Update(c *fiber.Ctx) error {
+	note := models.Notes{}
+	err := c.BodyParser(&note)
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	_, err = app.db.Update("tasks", dbx.Params{
-		"name":    task.Name,
-		"details": task.Details,
+	_, err = base.db.Update("notes", dbx.Params{
+		"title": note.Title,
+		"body":  note.Body,
 	}, dbx.Between("id", c.Params("id"), c.Params("id"))).Execute()
 
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
 
-	return c.Redirect(fmt.Sprintf("/tarea/%s", c.Params("id")))
+	return c.Redirect(fmt.Sprintf("/%s", c.Params("id")))
 }
 
-func (app *application) TaskDestroy(c *fiber.Ctx) error {
-	_, err := app.db.Delete("tasks", dbx.Between("id", c.Params("id"), c.Params("id"))).Execute()
+func (base *base) Destroy(c *fiber.Ctx) error {
+	_, err := base.db.Delete("notes", dbx.Between("id", c.Params("id"), c.Params("id"))).Execute()
 	if err != nil {
-		app.logger.Error("Error", zap.Error(err))
+		base.logger.Error("Error", zap.Error(err))
 	}
-	return c.Redirect("/tarea/")
+	return c.Redirect("/")
 }

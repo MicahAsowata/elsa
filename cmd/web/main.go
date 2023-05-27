@@ -14,8 +14,8 @@ import (
 
 const port = ":3000"
 
-type application struct {
-	app    *fiber.App
+type base struct {
+	base   *fiber.App
 	db     *dbx.DB
 	logger *zap.Logger
 	engine *html.Engine
@@ -40,15 +40,15 @@ func main() {
 	if err != nil {
 		logger.Error("Error", zap.Error(err))
 	}
-	base := &application{
-		app:    app,
+	base := &base{
+		base:   app,
 		db:     db,
 		logger: logger,
 		engine: engine,
 		port:   port,
 	}
-	TaskRoutes(base)
+	Routes(base)
 	logger.Info("Speak, for thy servant heareth")
-	base.app.Listen(port)
+	base.base.Listen(port)
 
 }

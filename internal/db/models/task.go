@@ -1,8 +1,7 @@
 package models
 
-type Tasks struct {
-	ID        uint
-	Name      string
-	Details   string
-	Completed bool
+type Notes struct {
+	ID    uint
+	Title string
+	Body  string
 }
