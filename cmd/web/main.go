@@ -46,5 +46,4 @@ func main() {
 	Routes(base)
 	logger.Info("Speak, for thy servant heareth")
 	base.base.Listen(port)
-
 }
