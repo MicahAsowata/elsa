@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -26,16 +25,13 @@ func main() {
 	if err != nil {
 		logger.Error("Error", zap.Error(err))
 	}
-	hostName := os.Getenv("HOST_NAME")
-	dbName := os.Getenv("DB_NAME")
-	hostPswd := os.Getenv("HOST_PSWD")
 	engine := html.New("./ui", ".html")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
 
-	db, err := dbx.Open("mysql", fmt.Sprintf("%s:%s@tcp(localhost:3306)/%s", hostName, hostPswd, dbName))
-	if err != nil {
+	db, _ := dbx.Open("mysql", os.Getenv("DSN"))
+	if err := db.DB().Ping(); err != nil {
 		logger.Error("Error", zap.Error(err))
 	}
 	base := &base{
@@ -43,7 +39,10 @@ func main() {
 		db:     db,
 		logger: logger,
 	}
-	Routes(base)
+	err = routes(base)
+	if err != nil {
+		logger.Error("Error", zap.Error(err))
+	}
 	logger.Info("Speak, for thy servant heareth")
 	base.base.Listen(port)
 }

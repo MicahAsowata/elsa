@@ -1,6 +1,6 @@
 package main
 
-func Routes(b *base) {
+func routes(b *base) error {
 	b.base.Static("/static", "./ui/static")
 	b.base.Get("/", b.Index)
 	b.base.Get("/new", b.New)
@@ -9,4 +9,5 @@ func Routes(b *base) {
 	b.base.Get("/:id/edit", b.Edit)
 	b.base.Post("/:id", b.Update)
 	b.base.Get("/:id/delete", b.Destroy)
+	return nil
 }
