@@ -18,8 +18,6 @@ type base struct {
 	base   *fiber.App
 	db     *dbx.DB
 	logger *zap.Logger
-	engine *html.Engine
-	port   string
 }
 
 func main() {
@@ -44,8 +42,6 @@ func main() {
 		base:   app,
 		db:     db,
 		logger: logger,
-		engine: engine,
-		port:   port,
 	}
 	Routes(base)
 	logger.Info("Speak, for thy servant heareth")

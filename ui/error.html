@@ -1,7 +1,18 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
-<p>{{.Message}}</p>
-<div>
-  <a href="/new">📝 Create Note</a>
-</div>
-{{template "partials/footer" .}}
+<article>
+  <header>{{template "partials/nav"}}</header>
+  <article>
+    <header>
+      <p>{{.Message}}</p>
+    </header>
+    <footer>
+      <nav>
+        <ul>
+          <li><a href="/new">📝 New Note</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </article>
+  <footer>{{template "partials/footer" .}}</footer>
+</article>
