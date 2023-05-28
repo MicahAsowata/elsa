@@ -118,8 +118,8 @@ func (base *base) Edit(c *fiber.Ctx) error {
 	}
 	return c.Render("notes/edit", fiber.Map{
 
-		"Name":  note.Title,
 		"Body":  note.Body,
+		"Name":  note.Title,
 		"ID":    note.ID,
 		"Title": note.Title,
 	})
