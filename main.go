@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-const port = ":3000"
+const port = "0.0.0.0:3000"
 
 type base struct {
 	base   *fiber.App
