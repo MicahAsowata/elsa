@@ -1,12 +1,15 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
-<form action="/" method="post">
-  <label for="title">👑 Title</label>
-  <input type="text" name="title" />
+<article>
+  <header>{{template "partials/nav"}}</header>
+  <form action="/" method="post">
+    <label for="title">👑 Title</label>
+    <input type="text" name="title" />
 
-  <label for="body">🎯 Body</label>
-  <textarea name="body"></textarea>
+    <label for="body">🎯 Body</label>
+    <textarea name="body"></textarea>
 
-  <button type="submit">📝 Create Note</button>
-</form>
-{{template "partials/footer" .}}
+    <button type="submit">📝 Create Note</button>
+  </form>
+  <footer>{{template "partials/footer" .}}</footer>
+</article>

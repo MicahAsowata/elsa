@@ -1,6 +1,20 @@
 {{template "partials/head"}}
 <title>{{.Title}}</title>
-{{range .Notes}}
-<h1>{{.Title}}</h1>
-<a href="/{{.ID}}">📖 Read more</a>
-{{end}} {{template "partials/footer" .}}
+<article>
+  <header>{{template "partials/nav"}}</header>
+  {{range .Notes}}
+  <article>
+    <header>
+      <h1>{{.Title}}</h1>
+    </header>
+    <footer>
+      <nav>
+        <ul>
+          <li><a href="/{{.ID}}">📖 Read more</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </article>
+  {{end}}
+  <footer>{{template "partials/footer" .}}</footer>
+</article>
